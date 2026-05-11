@@ -133,7 +133,7 @@ app.post(
     res.json({
 
       file:
-        `https://chatapp-backend-kxir.onrender.com/${req.file.filename}`
+        `https://chatapp-backend-kxir.onrender.com/uploads/${req.file.filename}`
 
     });
 
