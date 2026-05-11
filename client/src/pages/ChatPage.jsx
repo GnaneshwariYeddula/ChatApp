@@ -123,9 +123,24 @@ function ChatPage({
       'previousMessages',
       (oldMessages) => {
 
-        setMessages(
-          oldMessages
-        );
+       const savedMessages =
+  localStorage.getItem(
+    `chat-${roomCode}-${displayName}`
+  );
+
+if (savedMessages) {
+
+  setMessages(
+    JSON.parse(savedMessages)
+  );
+
+} else {
+
+  setMessages(
+    oldMessages
+  );
+
+}
 
       }
     );
@@ -359,6 +374,8 @@ function ChatPage({
           }
         );
 
+        
+
       } catch (err) {
 
         console.log(err);
@@ -456,16 +473,15 @@ function ChatPage({
   */
 
   const clearChat =
-    () => {
+  () => {
 
-      setMessages([]);
+    setMessages([]);
 
-      socket.emit(
-        'clearChat',
-        roomCode
-      );
+    localStorage.removeItem(
+      `chat-${roomCode}-${displayName}`
+    );
 
-    };
+  };
 
   /*
   =====================
@@ -698,11 +714,25 @@ function ChatPage({
   */
 
   const declineCall =
-    () => {
+  () => {
 
-      setIncomingCall(null);
+    socket.emit(
+      'end-call',
+      {
 
-    };
+        to:
+          incomingCall.from
+
+      }
+    );
+
+    setIncomingCall(null);
+
+    setIsCalling(false);
+
+    setCallAccepted(false);
+
+  };
 
   /*
   =====================
@@ -1136,19 +1166,19 @@ function ChatPage({
                         {msg.text && (
 
                           <p
-                            className="
-                            whitespace-pre-wrap
-                            break-words
-                            text-[15px]
-                            leading-6
-                            "
-                            style={{
-                              fontFamily:
-                                '"Segoe UI Emoji", "Noto Color Emoji", sans-serif'
-                            }}
-                          >
-                            {msg.text}
-                          </p>
+  className="
+  whitespace-pre-wrap
+  break-words
+  text-[15px]
+  leading-6
+  "
+  style={{
+    fontFamily:
+      '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","EmojiOne Color","Android Emoji",sans-serif'
+  }}
+>
+  {msg.text}
+</p>
 
                         )}
 
@@ -1309,60 +1339,69 @@ function ChatPage({
                 ">
 
                   <EmojiPicker
-                    onEmojiClick={
-                      (emojiData) => {
+  lazyLoadEmojis={true}
+  searchDisabled={false}
+  skinTonesDisabled={true}
+  previewConfig={{
+    showPreview: false
+  }}
+  onEmojiClick={(emojiData) => {
 
-                        setCurrentMessage(
-                          (prev) =>
-                            prev +
-                            emojiData.emoji
-                        );
+    const cleanEmoji =
+      emojiData.emoji;
 
-                      }
-                    }
-                  />
+    setCurrentMessage(
+      (prev) =>
+        prev + cleanEmoji
+    );
+
+  }}
+/>
 
                 </div>
 
               )}
 
               <input
-                value={
-                  currentMessage
-                }
-                onChange={(e) =>
-                  setCurrentMessage(
-                    e.target.value
-                  )
-                }
-                onKeyDown={
-                  handleTyping
-                }
-                onKeyPress={(e) => {
+  value={
+    currentMessage
+  }
+  onChange={(e) =>
+    setCurrentMessage(
+      e.target.value
+    )
+  }
+  onKeyDown={
+    handleTyping
+  }
+  onKeyPress={(e) => {
 
-                  if (
-                    e.key ===
-                    'Enter'
-                  ) {
+    if (
+      e.key ===
+      'Enter'
+    ) {
 
-                    handleSend();
+      handleSend();
 
-                  }
+    }
 
-                }}
-                placeholder="
-                Type message...
-                "
-                className="
-                flex-1
-                rounded-2xl
-                bg-slate-800
-                px-5
-                py-4
-                outline-none
-                "
-              />
-
+  }}
+  placeholder="
+  Type message...
+  "
+  style={{
+    fontFamily:
+      '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'
+  }}
+  className="
+  flex-1
+  rounded-2xl
+  bg-slate-800
+  px-5
+  py-4
+  outline-none
+  "
+/>
               <button
                 onClick={
                   handleSend
