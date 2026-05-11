@@ -133,7 +133,7 @@ app.post(
     res.json({
 
       file:
-        `http://localhost:5000/uploads/${req.file.filename}`
+        `https://chatapp-backend-kxir.onrender.com/${req.file.filename}`
 
     });
 

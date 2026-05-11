@@ -323,7 +323,7 @@ function ChatPage({
         const res =
           await axios.post(
 
-            'http://localhost:5000/upload',
+            'https://chatapp-backend-kxir.onrender.com/upload',
 
             formData
           );

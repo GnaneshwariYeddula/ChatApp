@@ -8,7 +8,7 @@ SINGLE SOCKET INSTANCE
 
 export const socket =
   io(
-    'http://localhost:5000',
+    'https://chatapp-backend-kxir.onrender.com',
 
     {
 
