@@ -550,7 +550,12 @@ if (savedMessages) {
           .getUserMedia({
 
             video:
-              type === 'video',
+  type === 'video'
+    ? {
+        facingMode:
+          'user'
+      }
+    : false,
 
             audio:
               true
@@ -560,18 +565,36 @@ if (savedMessages) {
       setStream(currentStream);
 
       const peer =
-        new Peer({
+  new Peer({
 
-          initiator:
-            true,
+    initiator:
+      true, // false in answerCall
 
-          trickle:
-            false,
+    trickle:
+      false,
 
-          stream:
-            currentStream
+    stream:
+      currentStream,
 
-        });
+    config: {
+
+      iceServers: [
+
+        {
+          urls:
+            'stun:stun.l.google.com:19302'
+        },
+
+        {
+          urls:
+            'stun:global.stun.twilio.com:3478'
+        }
+
+      ]
+
+    }
+
+  });
 
       peer.on(
         'signal',
@@ -643,8 +666,13 @@ if (savedMessages) {
           .getUserMedia({
 
             video:
-              incomingCall.callType ===
-              'video',
+  incomingCall.callType ===
+  'video'
+    ? {
+        facingMode:
+          'user'
+      }
+    : false,
 
             audio:
               true
@@ -654,18 +682,36 @@ if (savedMessages) {
       setStream(currentStream);
 
       const peer =
-        new Peer({
+  new Peer({
 
-          initiator:
-            false,
+    initiator:
+      false,
 
-          trickle:
-            false,
+    trickle:
+      false,
 
-          stream:
-            currentStream
+    stream:
+      currentStream,
 
-        });
+    config: {
+
+      iceServers: [
+
+        {
+          urls:
+            'stun:stun.l.google.com:19302'
+        },
+
+        {
+          urls:
+            'stun:global.stun.twilio.com:3478'
+        }
+
+      ]
+
+    }
+
+  });
 
       peer.on(
         'signal',
