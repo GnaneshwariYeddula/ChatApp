@@ -35,7 +35,7 @@ Backend:
 ### Clone Repository
 
 ```bash
-git clone YOUR_GITHUB_REPO_LINK
+git clone https://github.com/GnaneshwariYeddula/ChatApp.git
 ```
 
 ### Frontend
